@@ -149,16 +149,17 @@ def get_frames(videoName, path=''):
 #       landmarks_dict['img_channel'] = image_shape[2]
 #    with open(path + name + ".json", "w") as outfile: 
 #       json.dump(landmarks_dict, outfile)
-def saveLandmarks(landmarks_list, image_shape, name, path):
+def saveLandmarks(landmarks_list, image_shape, name, path, decimals = 4):
    """
    Description: save landmarks in specific path
    """
    landmarks_dict = {}
+   m = 10**decimals
    for ind, landmarks in enumerate(landmarks_list):
       landmarks_dict['frame'+str(ind)] = {'pose':{'x':[], 'y':[]},
                                           'right_hand':{'x':[], 'y':[]},
                                           'left_hand':{'x':[], 'y':[]},
-                                          'face':{'x':[], 'y':[]},
+                                          'face':{'x':[], 'y':[]}
                                           # 'complete':False
                                           }
       
@@ -166,29 +167,29 @@ def saveLandmarks(landmarks_list, image_shape, name, path):
       if landmarks.pose_landmarks:
          complete += 1
          for i in landmarks.pose_landmarks.landmark:
-            landmarks_dict['frame'+str(ind)]['pose']['x'].append(int(round(i.x, 4)*100))
-            landmarks_dict['frame'+str(ind)]['pose']['y'].append(int(round(i.y, 4)*100))
+            landmarks_dict['frame'+str(ind)]['pose']['x'].append(int(i.x*m))
+            landmarks_dict['frame'+str(ind)]['pose']['y'].append(int(i.y*m))
             # landmarks_dict['frame'+str(ind)]['pose']['z'].append(i.z)
 
       if landmarks.right_hand_landmarks:
          complete += 1
          for i in landmarks.right_hand_landmarks.landmark:
-            landmarks_dict['frame'+str(ind)]['right_hand']['x'].append(int(round(i.x, 4)*100))
-            landmarks_dict['frame'+str(ind)]['right_hand']['y'].append(int(round(i.y, 4)*100))
+            landmarks_dict['frame'+str(ind)]['right_hand']['x'].append(int(i.x*m))
+            landmarks_dict['frame'+str(ind)]['right_hand']['y'].append(int(i.y*m))
             # landmarks_dict['frame'+str(ind)]['right_hand']['z'].append(i.z)
 
       if landmarks.left_hand_landmarks:
          complete += 1
          for i in landmarks.left_hand_landmarks.landmark:
-            landmarks_dict['frame'+str(ind)]['left_hand']['x'].append(int(round(i.x, 4)*100))
-            landmarks_dict['frame'+str(ind)]['left_hand']['y'].append(int(round(i.y, 4)*100))
+            landmarks_dict['frame'+str(ind)]['left_hand']['x'].append(int(i.x*m))
+            landmarks_dict['frame'+str(ind)]['left_hand']['y'].append(int(i.y*m))
             # landmarks_dict['frame'+str(ind)]['left_hand']['z'].append(i.z)
 
       if landmarks.face_landmarks:
          complete += 1
          for i in landmarks.face_landmarks.landmark:
-            landmarks_dict['frame'+str(ind)]['face']['x'].append(int(round(i.x, 4)*100))
-            landmarks_dict['frame'+str(ind)]['face']['y'].append(int(round(i.y, 4)*100))
+            landmarks_dict['frame'+str(ind)]['face']['x'].append(int(i.x*m))
+            landmarks_dict['frame'+str(ind)]['face']['y'].append(int(i.y*m))
             # landmarks_dict['frame'+str(ind)]['face']['z'].append(i.z)
 
       # if complete == 4:
@@ -265,7 +266,7 @@ def get_landmarks_from_video(videoName, path=''):
          landmark = get_landmark_from_image(image)
          if landmark.pose_landmarks:
             landmarks.append(landmark)
-            # saveImage(image, imageName=videoName[:-4]+'_'+str(ind), path=path+'images/'+videoName[:-4])
+            saveImage(image, imageName=videoName[:-4]+'_'+str(ind), path=path+'images/'+videoName[:-4])
             ind += 1
          successImage,image = vidcap.read()
          image = image_resize(image)
@@ -293,4 +294,4 @@ for ind in df.index:
    get_landmarks_from_video(df.at[ind, 'videoName'], path='/home/lara/Documents/p2mnn/')
    if ind > 0:
       break
-   break
+   # break
