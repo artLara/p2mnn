@@ -1,0 +1,6 @@
+all_videos/
+images/
+landmarks/
+*.json
+*.mp4
+*.jpg
