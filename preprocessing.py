@@ -257,6 +257,7 @@ def get_landmarks_from_video(videoName, path=''):
    landmarks = []
    vidcap = cv2.VideoCapture(path + 'all_videos/' + videoName)
    successImage,image = vidcap.read()
+   shape = image.shape
    ind = 0
    while successImage:
       # print('--------------------Frame{}----------------'.format(ind))
@@ -266,7 +267,6 @@ def get_landmarks_from_video(videoName, path=''):
          if landmark.pose_landmarks:
             landmarks.append(landmark)
             saveImage(image, imageName=videoName[:-4]+'_'+str(ind), path=path+'images/'+videoName[:-4])
-            shape = image.shape
             ind += 1
          successImage,image = vidcap.read()      
       except:
