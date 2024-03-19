@@ -257,20 +257,18 @@ def get_landmarks_from_video(videoName, path=''):
    landmarks = []
    vidcap = cv2.VideoCapture(path + 'all_videos/' + videoName)
    successImage,image = vidcap.read()
-   image = image_resize(image)
-   shape = image.shape
    ind = 0
    while successImage:
       # print('--------------------Frame{}----------------'.format(ind))
       try:
+         image = image_resize(image)
          landmark = get_landmark_from_image(image)
          if landmark.pose_landmarks:
             landmarks.append(landmark)
             saveImage(image, imageName=videoName[:-4]+'_'+str(ind), path=path+'images/'+videoName[:-4])
+            shape = image.shape
             ind += 1
-         successImage,image = vidcap.read()
-         image = image_resize(image)
-      
+         successImage,image = vidcap.read()      
       except:
          print('Problems in frame of '+videoName)
       # if ind > 0:
@@ -287,22 +285,22 @@ def update_repo(message=''):
    os.system('git commit -m "{}"'.format(message))  
    os.system("git push")  
 
-update_repo(message='test')
-# path_dataset = '/home/lara/Documents/p2mnn/row_dataset_new.csv'
-# # path = '/media/lara/Elements/LSMTV/all_videos/'
-# df = pd.read_csv(path_dataset)
-# for ind in df.index:
-#    if not df.at[ind, 'downloaded']:
-#       continue
+path_dataset = '/home/lara/Documents/p2mnn/row_dataset_new.csv'
+# path = '/media/lara/Elements/LSMTV/all_videos/'
+df = pd.read_csv(path_dataset)
+for ind in df.index:
+   if not df.at[ind, 'downloaded']:
+      continue
 
-#    if df.at[ind, 'preprocessed']:
-#       continue
+   if df.at[ind, 'preprocessed']:
+      continue
 
-#    print('Processing {}/{}'.format(ind, len(df.index)))
-#    get_landmarks_from_video(df.at[ind, 'videoName'], path='/home/lara/Documents/p2mnn/')
-#    update_repo(message='update: video'+str(ind))
-#    df.at[ind, 'preprocessed'] = True
-#    if ind > 10:
-#       break
-   # break
+   print('Processing {}/{}'.format(ind, len(df.index)))
+   get_landmarks_from_video(df.at[ind, 'videoName'], path='/home/lara/Documents/p2mnn/')
+   update_repo(message='update: video'+str(ind))
+   df.at[ind, 'preprocessed'] = True
+   df.to_csv('row_dataset_new.csv', index=False)
+   if ind > 10:
+      break
+   break
 
