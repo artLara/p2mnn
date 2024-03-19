@@ -281,17 +281,28 @@ def get_landmarks_from_video(videoName, path=''):
                  shape, 
                  name=videoName[:-4], 
                  path=path+'landmarks/')
+   
+def update_repo(message=''):
+   os.system("git add .")
+   os.system('git commit -m "{}"'.format(message))  
+   os.system("git push")  
 
+update_repo(message='test')
+# path_dataset = '/home/lara/Documents/p2mnn/row_dataset_new.csv'
+# # path = '/media/lara/Elements/LSMTV/all_videos/'
+# df = pd.read_csv(path_dataset)
+# for ind in df.index:
+#    if not df.at[ind, 'downloaded']:
+#       continue
 
-path_dataset = '/home/lara/Documents/p2mnn/row_dataset_new.csv'
-# path = '/media/lara/Elements/LSMTV/all_videos/'
-df = pd.read_csv(path_dataset)
-for ind in df.index:
-   if not df.at[ind, 'downloaded']:
-      continue
+#    if df.at[ind, 'preprocessed']:
+#       continue
 
-   print('Processing {}/{}'.format(ind, len(df.index)))
-   get_landmarks_from_video(df.at[ind, 'videoName'], path='/home/lara/Documents/p2mnn/')
-   if ind > 0:
-      break
+#    print('Processing {}/{}'.format(ind, len(df.index)))
+#    get_landmarks_from_video(df.at[ind, 'videoName'], path='/home/lara/Documents/p2mnn/')
+#    update_repo(message='update: video'+str(ind))
+#    df.at[ind, 'preprocessed'] = True
+#    if ind > 10:
+#       break
    # break
+
